@@ -22,7 +22,7 @@
 namespace Simulation.Aivika.Experiments.Web
 
 open System
-open System.Web.UI
+//open System.Web.UI
 
 open Simulation.Aivika
 open Simulation.Aivika.Experiments
@@ -36,6 +36,10 @@ type ExperimentSpecsProvider () as provider =
     member x.Title with get() = title and set v = title <- v
     member x.Description with get () = description and set v = description <- v
     member x.Width with get () = width and set v = width <- v
+
+// Use HtmlTags NuGet ? Or HtmlAgilityPack ?
+// Need to create our own abstraction
+// Writing experiment results should not rely on a specific method e.g. creating html
 
     interface IExperimentProvider<HtmlTextWriter> with
         member x.CreateRenderer (ctx) =
