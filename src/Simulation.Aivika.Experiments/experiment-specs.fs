@@ -22,7 +22,7 @@
 namespace Simulation.Aivika.Experiments.Web
 
 open System
-//open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Experiments
@@ -41,7 +41,7 @@ type ExperimentSpecsProvider () as provider =
 // Need to create our own abstraction
 // Writing experiment results should not rely on a specific method e.g. creating html
 
-    interface IExperimentProvider<HtmlTextWriter> with
+    interface IExperimentProvider<HtmlDocument> with
         member x.CreateRenderer (ctx) =
             { new IExperimentRenderer with
                 member x.BeginRendering () = ()
@@ -52,18 +52,38 @@ type ExperimentSpecsProvider () as provider =
 
                     let exp = ctx.Experiment 
                     let specs = exp.Specs
-                    let writer = ctx.Writer
+                    let doc = ctx.Writer
                     let formatInfo = exp.FormatInfo 
 
-                    writer.WriteFullBeginTag ("h3")
-                    writer.WriteEncodedText (provider.Title)
-                    writer.WriteEndTag ("h3")
+                    let body = doc.Body
+
+                    body.Add("h3").Text(doc.Title) |> ignore
+
+                    //writer.WriteFullBeginTag ("h3")
+                    //writer.WriteEncodedText (provider.Title)
+                    //writer.WriteEndTag ("h3")
 
                     if provider.Description <> "" then
 
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (provider.Description)
-                        writer.WriteEndTag ("p")
+                        body.Add("p").Text(provider.Description) |> ignore
+
+                        //writer.WriteFullBeginTag ("p")
+                        //writer.WriteEncodedText (provider.Description)
+                        //writer.WriteEndTag ("p")
+
+                    
+
+                    body.Add("p") |> ignore
+
+                    let table = TableTag()
+
+                    body.Append(table) |> ignore
+
+                    table.Attr("frame", "border")
+                         .Attr("cellspacing", string 4)
+                         .Attr("width",  string provider.Width) |> ignore
+
+                    
 
                     writer.WriteFullBeginTag ("p")
                     writer.WriteBeginTag ("table")

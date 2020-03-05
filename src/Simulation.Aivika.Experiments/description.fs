@@ -22,7 +22,7 @@
 namespace Simulation.Aivika.Experiments.Web
 
 open System
-open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -40,7 +40,7 @@ type DescriptionProvider () as provider =
     member x.Transform with get () = transform and set v = transform <- v
     member x.Series with get () = series and set v = series <- v
 
-    interface IExperimentProvider<HtmlTextWriter> with
+    interface IExperimentProvider<HtmlDocument> with
         member x.CreateRenderer (ctx) =
 
             let exp = ctx.Experiment 
