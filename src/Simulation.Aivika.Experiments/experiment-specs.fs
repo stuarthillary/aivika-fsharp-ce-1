@@ -37,7 +37,6 @@ type ExperimentSpecsProvider () as provider =
     member x.Description with get () = description and set v = description <- v
     member x.Width with get () = width and set v = width <- v
 
-// Use HtmlTags NuGet ? Or HtmlAgilityPack ?
 // Need to create our own abstraction
 // Writing experiment results should not rely on a specific method e.g. creating html
 
@@ -59,93 +58,45 @@ type ExperimentSpecsProvider () as provider =
 
                     body.Add("h3").Text(doc.Title) |> ignore
 
-                    //writer.WriteFullBeginTag ("h3")
-                    //writer.WriteEncodedText (provider.Title)
-                    //writer.WriteEndTag ("h3")
-
                     if provider.Description <> "" then
-
                         body.Add("p").Text(provider.Description) |> ignore
 
-                        //writer.WriteFullBeginTag ("p")
-                        //writer.WriteEncodedText (provider.Description)
-                        //writer.WriteEndTag ("p")
-
-                    
-
-                    body.Add("p") |> ignore
+                    let p = body.Add("p")
 
                     let table = TableTag()
-
-                    body.Append(table) |> ignore
+                    p.Append(table) |> ignore
 
                     table.Attr("frame", "border")
                          .Attr("cellspacing", string 4)
                          .Attr("width",  string provider.Width) |> ignore
 
-                    
+                    table.AddBodyRow()
+                         .Cell().Attr("colspan", "2")
+                         .Add("p").Attr("align", "center")
+                         .Text(provider.Title) |> ignore
 
-                    writer.WriteFullBeginTag ("p")
-                    writer.WriteBeginTag ("table")
-                    writer.WriteAttribute ("frame", "border")
-                    writer.WriteAttribute ("cellspacing", string 4)
-                    writer.WriteAttribute ("width", string provider.Width)
-                    writer.Write (">")
-                    writer.WriteFullBeginTag ("tr")
-                    writer.WriteBeginTag ("td")
-                    writer.WriteAttribute ("colspan", "2")
-                    writer.Write (">")
-                    writer.WriteBeginTag ("p")
-                    writer.WriteAttribute ("align", "center")
-                    writer.Write (">")
-                    writer.WriteEncodedText (provider.Title)
-                    writer.WriteEndTag ("p")
-                    writer.WriteEndTag ("td")
-                    writer.WriteEndTag ("tr")
-                    writer.WriteFullBeginTag ("tr")
-                    writer.WriteFullBeginTag ("td")
-                    writer.WriteEncodedText (formatInfo.StartTimeText)
-                    writer.WriteEndTag ("td")
-                    writer.WriteFullBeginTag ("td")
-                    writer.WriteEncodedText (Convert.ToString (specs.StartTime, formatInfo))
-                    writer.WriteEndTag ("td")
-                    writer.WriteEndTag ("tr")
-                    writer.WriteFullBeginTag ("tr")
-                    writer.WriteFullBeginTag ("td")
-                    writer.WriteEncodedText (formatInfo.StopTimeText)
-                    writer.WriteEndTag ("td")
-                    writer.WriteFullBeginTag ("td")
-                    writer.WriteEncodedText (Convert.ToString (specs.StopTime, formatInfo))
-                    writer.WriteEndTag ("td")
-                    writer.WriteEndTag ("tr")
-                    writer.WriteFullBeginTag ("tr")
-                    writer.WriteFullBeginTag ("td")
-                    writer.WriteEncodedText (formatInfo.DTText)
-                    writer.WriteEndTag ("td")
-                    writer.WriteFullBeginTag ("td")
-                    writer.WriteEncodedText (Convert.ToString (specs.DT, formatInfo))
-                    writer.WriteEndTag ("td")
-                    writer.WriteEndTag ("tr")
-                    writer.WriteFullBeginTag ("tr")
-                    writer.WriteFullBeginTag ("td")
-                    writer.WriteEncodedText (formatInfo.RunCount)
-                    writer.WriteEndTag ("td")
-                    writer.WriteFullBeginTag ("td")
-                    writer.WriteEncodedText (Convert.ToString (exp.RunCount, formatInfo))
-                    writer.WriteEndTag ("td")
-                    writer.WriteEndTag ("tr")
-                    writer.WriteFullBeginTag ("tr")
-                    writer.WriteFullBeginTag ("td")
-                    writer.WriteEncodedText (formatInfo.IntegMethod)
-                    writer.WriteEndTag ("td")
-                    writer.WriteFullBeginTag ("td")
+                    let r = table.AddBodyRow()
+                    r.Cell(formatInfo.StartTimeText) |> ignore
+                    r.Cell(Convert.ToString (specs.StartTime, formatInfo)) |> ignore
+
+                    let r = table.AddBodyRow()
+                    r.Cell(formatInfo.StopTimeText) |> ignore
+                    r.Cell(Convert.ToString (specs.StopTime, formatInfo)) |> ignore
+
+                    let r = table.AddBodyRow()
+                    r.Cell(formatInfo.DTText) |> ignore
+                    r.Cell(Convert.ToString (specs.DT, formatInfo)) |> ignore
+
+                    let r = table.AddBodyRow()
+                    r.Cell(formatInfo.RunCount) |> ignore
+                    r.Cell(Convert.ToString (exp.RunCount, formatInfo)) |> ignore
+
+                    let r = table.AddBodyRow()
+                    r.Cell(formatInfo.IntegMethod) |> ignore
 
                     match specs.Method with
-                    | Euler -> writer.Write (formatInfo.EulerText)
-                    | RungeKutta2 -> writer.Write (formatInfo.RungeKutta2Text)
-                    | RungeKutta4 -> writer.Write (formatInfo.RungeKutta4Text)
-
-                    writer.WriteEndTag ("td")
-                    writer.WriteEndTag ("tr")
-                    writer.WriteEndTag ("table")
-                    writer.WriteEndTag ("p") }
+                    | Euler -> r.Cell (formatInfo.EulerText) 
+                    | RungeKutta2 -> r.Cell (formatInfo.RungeKutta2Text)
+                    | RungeKutta4 -> r.Cell (formatInfo.RungeKutta4Text) 
+                    |> ignore
+             }
