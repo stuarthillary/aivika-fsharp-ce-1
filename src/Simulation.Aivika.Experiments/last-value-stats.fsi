@@ -22,7 +22,7 @@
 namespace Simulation.Aivika.Experiments.Web
 
 open System
-open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -31,7 +31,7 @@ open Simulation.Aivika.Experiments
 /// It shows the statistics summary gathered in final simulation time points.
 type LastValueStatsProvider =
 
-    interface IExperimentProvider<HtmlTextWriter>
+    interface IExperimentProvider<HtmlDocument>
 
     /// Initializes a new instance.
     new: unit -> LastValueStatsProvider 

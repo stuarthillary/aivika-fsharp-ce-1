@@ -21,9 +21,7 @@
 
 namespace Simulation.Aivika.Experiments.Web
 
-open System
-open System.Globalization
-open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -36,34 +34,34 @@ module ExperimentProvider =
     [<CompiledName ("ExperimentSpecs")>]
     let experimentSpecs =
         let p = ExperimentSpecsProvider ()
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>
 
     [<CompiledName ("Description")>]
     let description (series: ResultTransform) =
         let p = DescriptionProvider ()
         p.Series <- series
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>
 
     [<CompiledName ("LastValue")>]
     let lastValue (series: ResultTransform) =
         let p = LastValueProvider ()
         p.Series <- series
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>
 
     [<CompiledName ("Table")>]
     let table (series: ResultTransform) =
         let p = TableProvider ()
         p.Series <- series
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>
 
     [<CompiledName ("LastValueTable")>]
     let lastValueTable (series: ResultTransform) =
         let p = LastValueTableProvider ()
         p.Series <- series
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>
 
     [<CompiledName ("LastValueStats")>]
     let lastValueStats (series: ResultTransform) =
         let p = LastValueStatsProvider ()
         p.Series <- series
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>

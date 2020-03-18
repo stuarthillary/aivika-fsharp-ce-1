@@ -20,7 +20,7 @@
 // met: http://www.gnu.org/licenses/gpl-3.0.html.
 
 namespace Simulation.Aivika.Experiments
-        
+
 open System
 
 open Simulation.Aivika
@@ -28,7 +28,7 @@ open Simulation.Aivika
 type BinningStrategy = array<float> -> int
 
 type Histogram = array<float * array<int>>
-    
+
 [<RequireQualifiedAccess>]
 [<CompilationRepresentation (CompilationRepresentationFlags.ModuleSuffix)>]
 module BinningStrategy =

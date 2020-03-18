@@ -22,8 +22,7 @@
 namespace Simulation.Aivika.Experiments
 
 open System
-open System.Globalization
-//open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -194,10 +193,10 @@ module ExperimentExtensions =
     type Experiment with
 
         /// Renders the simulation experiment.
-        member Render: model:Simulation<ResultSet> * providers:IExperimentProvider<'a> list * ctx:ExperimentContext<'a> -> Async<unit>
+        //member Render: model:Simulation<ResultSet> * providers:IExperimentProvider<'a> list * ctx:ExperimentContext<'a> -> Async<unit>
         
         /// Renders the simulation experiment saving the results in the HTML page.
-//        member RenderHtml: model:Simulation<ResultSet> * providers:IExperimentProvider<HtmlTextWriter> list -> Async<unit>
+        member RenderHtml: model:Simulation<ResultSet> * providers:IExperimentProvider<HtmlDocument> list -> Async<unit>
 
 /// This module contains functions for working with the experiment renderers.
 [<RequireQualifiedAccess>]

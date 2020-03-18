@@ -23,7 +23,7 @@ namespace Simulation.Aivika.Experiments.Web
 
 open System
 open System.IO
-open System.Web.UI
+open HtmlTags
 open System.Globalization
 
 open Simulation.Aivika
@@ -46,7 +46,7 @@ type LastValueStatsProvider () as provider =
     member x.Series with get () = series and set v = series <- v
     member x.Filter with get () = filter and set v = filter <- v
 
-    interface IExperimentProvider<HtmlTextWriter> with
+    interface IExperimentProvider<HtmlDocument> with
         member x.CreateRenderer (ctx) =
 
             let exp = ctx.Experiment 
@@ -100,15 +100,13 @@ type LastValueStatsProvider () as provider =
                     }
                 member x.EndRendering () =
 
-                    writer.WriteFullBeginTag ("h3")
-                    writer.WriteEncodedText (provider.Title)
-                    writer.WriteEndTag ("h3")
+                    writer.Add("h3")
+                          .Text provider.Title |> ignore
 
                     if provider.Description <> "" then
 
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (provider.Description)
-                        writer.WriteEndTag ("p")
+                        writer.Add("p")
+                              .Text provider.Description |> ignore
 
                     let getDescription (id: ResultId) =
                         match formatInfo.ResultFormatInfo.GetDescription (id) with
@@ -119,6 +117,11 @@ type LastValueStatsProvider () as provider =
 
                         let name  = (!names).[i]
                         let stats = (!stats).[i] 
+
+                        let p = writer.Add("p")
+
+                        let table = TableTag()
+                        p.Append(table) |> ignore
 
                         writer.WriteFullBeginTag ("p")
                         writer.WriteBeginTag ("table")

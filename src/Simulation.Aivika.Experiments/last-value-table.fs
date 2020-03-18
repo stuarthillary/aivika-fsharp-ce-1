@@ -23,7 +23,7 @@ namespace Simulation.Aivika.Experiments.Web
 
 open System
 open System.IO
-open System.Web.UI
+open HtmlTags
 open System.Globalization
 
 open Simulation.Aivika
@@ -50,7 +50,7 @@ type LastValueTableProvider () as provider =
     member x.Series with get () = series and set v = series <- v
     member x.Filter with get () = filter and set v = filter <- v
 
-    interface IExperimentProvider<HtmlTextWriter> with
+    interface IExperimentProvider<HtmlDocument> with
         member x.CreateRenderer (ctx) =
 
             let exp = ctx.Experiment 

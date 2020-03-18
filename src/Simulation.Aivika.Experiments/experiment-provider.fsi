@@ -21,9 +21,7 @@
 
 namespace Simulation.Aivika.Experiments.Web
 
-open System
-open System.Globalization
-open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -36,24 +34,24 @@ module ExperimentProvider =
 
     /// Shows the experiment specs.
     [<CompiledName ("ExperimentSpecs")>]
-    val experimentSpecs: IExperimentProvider<HtmlTextWriter>
+    val experimentSpecs: IExperimentProvider<HtmlDocument>
 
     /// Shows the information about the specified series.
     [<CompiledName ("Description")>]
-    val description: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val description: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the last values for the specified series.
     [<CompiledName ("LastValue")>]
-    val lastValue: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val lastValue: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the CSV file with results for the specified series.
     [<CompiledName ("Table")>]
-    val table: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val table: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the CSV file with last results for the specified series.
     [<CompiledName ("LastValueTable")>]
-    val lastValueTable: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val lastValueTable: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the last value statistics for the specified series.
     [<CompiledName ("LastValueStats")>]
-    val lastValueStats: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val lastValueStats: series:ResultTransform -> IExperimentProvider<HtmlDocument>

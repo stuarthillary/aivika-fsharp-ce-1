@@ -22,7 +22,7 @@
 namespace Simulation.Aivika.Experiments.Web
 
 open System
-open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -42,11 +42,12 @@ type LastValueProvider () as provider =
     member x.Transform with get () = transform and set v = transform <- v
     member x.Series with get () = series and set v = series <- v
 
-    interface IExperimentProvider<HtmlTextWriter> with
+    interface IExperimentProvider<HtmlDocument> with
         member x.CreateRenderer (ctx) =
 
             let exp = ctx.Experiment 
             let writer = ctx.Writer
+
             let formatInfo = exp.FormatInfo
             let runCount = exp.RunCount
 
@@ -83,12 +84,9 @@ type LastValueProvider () as provider =
                     }
                 member x.EndRendering () =
 
-                    let renderPair x y =
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (x)
-                        writer.WriteEncodedText (" = ")
-                        writer.WriteEncodedText (y)
-                        writer.WriteEndTag ("p")
+                    let renderPair (x : ResultName) (y : string) =
+                        writer.Add("p")
+                              .Text(sprintf "%s = %s" x y) |> ignore
 
                     let renderSingleRun () =
                         let pairs = !dict.[0]
@@ -101,22 +99,20 @@ type LastValueProvider () as provider =
                             let subtitle = subtitle.Replace ("$RUN_INDEX", Convert.ToString (i, formatInfo))
                             let subtitle = subtitle.Replace ("$RUN_COUNT", Convert.ToString (runCount, formatInfo))
                             let subtitle = subtitle.Replace ("$TITLE", provider.Title)
-                            writer.WriteFullBeginTag ("h4")
-                            writer.WriteEncodedText (subtitle)
-                            writer.WriteEndTag ("h4")
+                            writer.Add("h4")
+                                  .Text subtitle |> ignore
+
                             let pairs = !dict.[i - 1]
                             for (x, y) in pairs do
                                 renderPair x y
 
-                    writer.WriteFullBeginTag ("h3")
-                    writer.WriteEncodedText (provider.Title)
-                    writer.WriteEndTag ("h3")
+                    writer.Add("h3")
+                          .Text provider.Title |> ignore
 
                     if provider.Description <> "" then
 
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (provider.Description)
-                        writer.WriteEndTag ("p")
+                        writer.Add("p")
+                              .Text provider.Description  |> ignore
 
                     if runCount = 1 then
                         renderSingleRun ()
