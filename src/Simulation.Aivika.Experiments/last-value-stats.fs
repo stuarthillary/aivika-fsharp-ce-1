@@ -112,6 +112,22 @@ type LastValueStatsProvider () as provider =
                         match formatInfo.ResultFormatInfo.GetDescription (id) with
                         | Some text -> text
                         | None -> ""
+                    
+                    let getValue (stats:SamplingStats<float>) formatInfo (r: ResultId) =
+                        let value = match r with
+                                    | SamplingStatsMeanId -> Convert.ToString (SamplingStats.mean stats, formatInfo)
+                                    | SamplingStatsDeviationId -> Convert.ToString (SamplingStats.deviation stats, formatInfo)
+                                    | SamplingStatsMinimumId -> Convert.ToString (SamplingStats.minimum stats, formatInfo)
+                                    | SamplingStatsMaximumId -> Convert.ToString (SamplingStats.maximum stats, formatInfo)
+                                    | SamplingStatsCountId -> Convert.ToString (SamplingStats.count stats, formatInfo)
+                                    | _ -> "Unknown value"
+
+                        getDescription r, value
+
+                    let addValue (table: TableTag) (f:ResultDescription, v:string) =
+                        let row = table.AddBodyRow()
+                        row.Cell().Text(f) |> ignore
+                        row.Cell().Text(v) |> ignore
 
                     for i = 0 to (!names).Length - 1 do
 
@@ -123,63 +139,21 @@ type LastValueStatsProvider () as provider =
                         let table = TableTag()
                         p.Append(table) |> ignore
 
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteBeginTag ("table")
-                        writer.WriteAttribute ("frame", "border")
-                        writer.WriteAttribute ("cellspacing", string 4)
-                        writer.WriteAttribute ("width", string provider.Width)
-                        writer.Write (">")
-                        writer.WriteFullBeginTag ("tr")
-                        writer.WriteBeginTag ("td")
-                        writer.WriteAttribute ("colspan", "2")
-                        writer.Write (">")
-                        writer.WriteBeginTag ("p")
-                        writer.WriteAttribute ("align", "center")
-                        writer.Write (">")
-                        writer.WriteEncodedText (name)
-                        writer.WriteEndTag ("p")
-                        writer.WriteEndTag ("td")
-                        writer.WriteEndTag ("tr")
-                        writer.WriteFullBeginTag ("tr")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (getDescription SamplingStatsMeanId)
-                        writer.WriteEndTag ("td")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (Convert.ToString (SamplingStats.mean stats, formatInfo))
-                        writer.WriteEndTag ("td")
-                        writer.WriteEndTag ("tr")
-                        writer.WriteFullBeginTag ("tr")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (getDescription SamplingStatsDeviationId)
-                        writer.WriteEndTag ("td")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (Convert.ToString (SamplingStats.deviation stats, formatInfo))
-                        writer.WriteEndTag ("td")
-                        writer.WriteEndTag ("tr")
-                        writer.WriteFullBeginTag ("tr")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (getDescription SamplingStatsMinimumId)
-                        writer.WriteEndTag ("td")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (Convert.ToString (SamplingStats.minimum stats, formatInfo))
-                        writer.WriteEndTag ("td")
-                        writer.WriteEndTag ("tr")
-                        writer.WriteFullBeginTag ("tr")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (getDescription SamplingStatsMaximumId)
-                        writer.WriteEndTag ("td")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (Convert.ToString (SamplingStats.maximum stats, formatInfo))
-                        writer.WriteEndTag ("td")
-                        writer.WriteEndTag ("tr")
-                        writer.WriteFullBeginTag ("tr")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (getDescription SamplingStatsCountId)
-                        writer.WriteEndTag ("td")
-                        writer.WriteFullBeginTag ("td")
-                        writer.WriteEncodedText (Convert.ToString (SamplingStats.count stats, formatInfo))
-                        writer.WriteEndTag ("td")
-                        writer.WriteEndTag ("tr")
-                        writer.WriteEndTag ("table")
-                        writer.WriteEndTag ("p")
+                        table.Attr("frame", "border")
+                             .Attr("cellspacing", string 4)
+                             .Attr("width", string provider.Width) |> ignore
+
+                        table.AddBodyRow()
+                            .Cell().Attr("colspan", "2")
+                            .Add("p").Attr("align", "center")
+                            .Text(name) |> ignore
+
+                        let addV = addValue table
+                        let v = getValue stats formatInfo
+
+                        addV (v SamplingStatsMeanId)
+                        addV (v SamplingStatsDeviationId)
+                        addV (v SamplingStatsMinimumId)
+                        addV (v SamplingStatsMaximumId)
+                        addV (v SamplingStatsCountId)
             }

@@ -79,42 +79,24 @@ type DescriptionProvider () as provider =
                     }
                 member x.EndRendering () =
 
-                    let renderPair x y =
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (x)
-                        writer.WriteEncodedText (" = ")
-                        writer.WriteEncodedText (y)
-                        writer.WriteEndTag ("p")
-
-                    writer.WriteFullBeginTag ("h3")
-                    writer.WriteEncodedText (provider.Title)
-                    writer.WriteEndTag ("h3")
+                    writer.Add("h3").Text provider.Title |> ignore
 
                     if provider.Description <> "" then
+                        writer.Add("p").Text provider.Description |> ignore
 
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (provider.Description)
-                        writer.WriteEndTag ("p")
-
-                    writer.WriteFullBeginTag ("ul")
+                    let ul = writer.Add("ul")
 
                     for i = 0 to (!names).Length - 1 do
 
                         let name  = (!names).[i]
                         let descr = (!descrs).[i]
 
-                        writer.WriteFullBeginTag ("li")
-                        writer.WriteEncodedText (name)
+                        let li = ul.Add("li")
+                        li.Text name |> ignore
 
                         match descr with
                         | None   -> ()
                         | Some x ->
-
-                            writer.WriteEncodedText (" - ")
-                            writer.WriteEncodedText (x)
-
-                        writer.WriteEndTag ("li")
-
-                    writer.WriteEndTag ("ul")
-
+                            li.AppendText " - " |> ignore
+                            li.AppendText x |> ignore
             }

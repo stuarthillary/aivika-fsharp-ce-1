@@ -23,7 +23,7 @@ namespace Simulation.Aivika.Charting.Web
 
 open System
 open System.IO
-open System.Web.UI
+open HtmlTags
 open System.Globalization
 open System.Windows.Forms.DataVisualization.Charting
 
@@ -56,7 +56,7 @@ type TimeSeriesProvider () as provider =
     member x.Series with get () = series and set v = series <- v
     member x.SeriesColors with get () = seriesColors and set v = seriesColors <- v 
 
-    interface IExperimentProvider<HtmlTextWriter> with
+    interface IExperimentProvider<HtmlDocument> with
         member x.CreateRenderer (ctx) =
 
             let exp = ctx.Experiment 
@@ -166,16 +166,11 @@ type TimeSeriesProvider () as provider =
                     }
                 member x.EndRendering () =
 
-                    let getLink filename =
+                    let getLink (filename:string) =
                         Uri.EscapeUriString (Path.GetFileName (filename))
 
                     let renderImage filename = 
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteBeginTag ("image")
-                        writer.WriteAttribute ("src", getLink filename)
-                        writer.Write (">")
-                        writer.WriteEndTag ("image")
-                        writer.WriteEndTag ("p")
+                        writer.Add("p").Add("image").Attr("image", getLink filename) |> ignore
 
                     let renderSingleRun () =
                         let filename = dict.[0]
@@ -187,21 +182,14 @@ type TimeSeriesProvider () as provider =
                             let subtitle = subtitle.Replace ("$RUN_INDEX", Convert.ToString (i, formatInfo))
                             let subtitle = subtitle.Replace ("$RUN_COUNT", Convert.ToString (runCount, formatInfo))
                             let subtitle = subtitle.Replace ("$TITLE", provider.Title)
-                            writer.WriteFullBeginTag ("h4")
-                            writer.WriteEncodedText (subtitle)
-                            writer.WriteEndTag ("h4")
+                            writer.Add("h4").Text subtitle |> ignore
                             let filename = dict.[i - 1]
                             renderImage filename
 
-                    writer.WriteFullBeginTag ("h3")
-                    writer.WriteEncodedText (provider.Title)
-                    writer.WriteEndTag ("h3")
+                    writer.Add("h3").Text provider.Title |> ignore
 
                     if provider.Description <> "" then
-
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (provider.Description)
-                        writer.WriteEndTag ("p")
+                        writer.Add("p").Text provider.Description |> ignore
 
                     if runCount = 1 then
                         renderSingleRun ()

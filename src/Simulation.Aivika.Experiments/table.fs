@@ -128,17 +128,13 @@ type TableProvider () as provider =
                     }
                 member x.EndRendering () =
 
-                    let getLink filename =
+                    let getLink (filename:string) =
                         Uri.EscapeUriString (Path.GetFileName (filename))
 
-                    let renderLink filename text = 
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteBeginTag ("a")
-                        writer.WriteAttribute ("href", getLink filename)
-                        writer.Write (">")
-                        writer.WriteEncodedText (text)
-                        writer.WriteEndTag ("a")
-                        writer.WriteEndTag ("p")
+                    let renderLink (filename:string) text = 
+                        let a = writer.Add("p").Add("a")
+                        a.Attr("href", getLink filename) |> ignore
+                        a.Text text |> ignore
 
                     let renderSingleRun () =
                         let filename = dict.[0]
@@ -153,15 +149,10 @@ type TableProvider () as provider =
                             let text = text.Replace ("$LINK", provider.LinkText)
                             renderLink filename text
 
-                    writer.WriteFullBeginTag ("h3")
-                    writer.WriteEncodedText (provider.Title)
-                    writer.WriteEndTag ("h3")
+                    writer.Add("h3").Text provider.Title |> ignore
 
                     if provider.Description <> "" then
-
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (provider.Description)
-                        writer.WriteEndTag ("p")
+                        writer.Add("p").Add(provider.Description).Encoded(true) |> ignore
 
                     if runCount = 1 then
                         renderSingleRun ()

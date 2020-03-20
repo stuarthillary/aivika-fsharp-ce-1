@@ -75,28 +75,22 @@ type ExperimentSpecsProvider () as provider =
                          .Add("p").Attr("align", "center")
                          .Text(provider.Title) |> ignore
 
-                    let r = table.AddBodyRow()
-                    r.Cell(formatInfo.StartTimeText) |> ignore
-                    r.Cell(Convert.ToString (specs.StartTime, formatInfo)) |> ignore
+                    let addValue (table: TableTag) (n:string) (v:string) =
+                        let row = table.AddBodyRow()
+                        row.Cell().Text(n) |> ignore
+                        row.Cell().Text(v) |> ignore
 
-                    let r = table.AddBodyRow()
-                    r.Cell(formatInfo.StopTimeText) |> ignore
-                    r.Cell(Convert.ToString (specs.StopTime, formatInfo)) |> ignore
+                    let addV = addValue table
 
-                    let r = table.AddBodyRow()
-                    r.Cell(formatInfo.DTText) |> ignore
-                    r.Cell(Convert.ToString (specs.DT, formatInfo)) |> ignore
+                    addV formatInfo.StartTimeText (Convert.ToString (specs.StartTime, formatInfo))
+                    addV formatInfo.StopTimeText (Convert.ToString (specs.StopTime, formatInfo))
+                    addV formatInfo.DTText (Convert.ToString (specs.DT, formatInfo))
+                    addV formatInfo.RunCount (Convert.ToString (exp.RunCount, formatInfo))
 
-                    let r = table.AddBodyRow()
-                    r.Cell(formatInfo.RunCount) |> ignore
-                    r.Cell(Convert.ToString (exp.RunCount, formatInfo)) |> ignore
+                    let v = match specs.Method with
+                            | Euler -> formatInfo.EulerText
+                            | RungeKutta2 -> formatInfo.RungeKutta2Text
+                            | RungeKutta4 -> formatInfo.RungeKutta4Text
 
-                    let r = table.AddBodyRow()
-                    r.Cell(formatInfo.IntegMethod) |> ignore
-
-                    match specs.Method with
-                    | Euler -> r.Cell (formatInfo.EulerText) 
-                    | RungeKutta2 -> r.Cell (formatInfo.RungeKutta2Text)
-                    | RungeKutta4 -> r.Cell (formatInfo.RungeKutta4Text) 
-                    |> ignore
+                    addV formatInfo.IntegMethod v
              }

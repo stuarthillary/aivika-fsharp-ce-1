@@ -24,7 +24,7 @@ namespace Simulation.Aivika.Charting.Web
 open System
 open System.Collections.Generic
 open System.IO
-open System.Web.UI
+open HtmlTags
 open System.Globalization
 open System.Drawing
 open System.Windows.Forms.DataVisualization.Charting
@@ -58,7 +58,7 @@ type LastValueHistogramProvider () as provider =
     member x.Series with get () = series and set v = series <- v
     member x.SeriesColors with get () = seriesColors and set v = seriesColors <- v 
 
-    interface IExperimentProvider<HtmlTextWriter> with
+    interface IExperimentProvider<HtmlDocument> with
         member x.CreateRenderer (ctx) =
 
             let exp = ctx.Experiment 
@@ -167,23 +167,13 @@ type LastValueHistogramProvider () as provider =
                     if exp.Verbose then
                         printfn "Generated file %s" filename
 
-                    let getLink filename =
+                    let getLink (filename:string) =
                         Uri.EscapeUriString (Path.GetFileName (filename))
 
-                    writer.WriteFullBeginTag ("h3")
-                    writer.WriteEncodedText (provider.Title)
-                    writer.WriteEndTag ("h3")
+                    writer.Add("h3").Text provider.Title |> ignore
 
                     if provider.Description <> "" then
+                        writer.Add("p").Text provider.Description |> ignore
 
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (provider.Description)
-                        writer.WriteEndTag ("p")
-
-                    writer.WriteFullBeginTag ("p")
-                    writer.WriteBeginTag ("image")
-                    writer.WriteAttribute ("src", getLink filename)
-                    writer.Write (">")
-                    writer.WriteEndTag ("image")
-                    writer.WriteEndTag ("p")
+                    writer.Add("p").Add("image").Attr("src", getLink filename) |> ignore
             }

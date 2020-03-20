@@ -21,9 +21,7 @@
 
 namespace Simulation.Aivika.Charting.Web
 
-open System
-open System.Globalization
-open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -36,40 +34,40 @@ module ExperimentProvider =
 
     /// Renders the time series for the specified series.
     [<CompiledName ("TimeSeries")>]
-    val timeSeries: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val timeSeries: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the XY Chart for the specified series.
     [<CompiledName ("XYChart")>]
-    val xyChart: seriesX:ResultTransform -> seriesY:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val xyChart: seriesX:ResultTransform -> seriesY:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the deviation chart for the specified series.
     [<CompiledName ("DeviationChart")>]
-    val deviationChart: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val deviationChart: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the last value histogram for the specified series.
     [<CompiledName ("LastValueHistogram")>]
-    val lastValueHistogram: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val lastValueHistogram: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the basic queue properties for the specified series.
     [<CompiledName ("Queue")>]
-    val queue: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val queue: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the basic queue properties for the specified series.
     [<CompiledName ("InfiniteQueue")>]
-    val infiniteQueue: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val infiniteQueue: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the basic server properties for the specified series.
     [<CompiledName ("Server")>]
-    val server: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val server: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the basic arrival timer properties for the specified series.
     [<CompiledName ("ArrivalTimer")>]
-    val arrivalTimer: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val arrivalTimer: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the basic resource properties for the specified series.
     [<CompiledName ("Resource")>]
-    val resource: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val resource: series:ResultTransform -> IExperimentProvider<HtmlDocument>
 
     /// Renders the basic resource properties for the specified series.
     [<CompiledName ("PreemptibleResource")>]
-    val preemptibleResource: series:ResultTransform -> IExperimentProvider<HtmlTextWriter>
+    val preemptibleResource: series:ResultTransform -> IExperimentProvider<HtmlDocument>

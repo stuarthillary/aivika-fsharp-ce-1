@@ -22,7 +22,7 @@
 namespace Simulation.Aivika.Charting.Web
 
 open System
-open System.Web.UI
+open HtmlTags
 open System.Drawing
 
 open Simulation.Aivika
@@ -32,7 +32,7 @@ open Simulation.Aivika.Experiments
 /// It plots the Time Series and saves them in files.
 type TimeSeriesProvider =
 
-    interface IExperimentProvider<HtmlTextWriter>
+    interface IExperimentProvider<HtmlDocument>
 
     /// Initializes a new instance.
     new: unit -> TimeSeriesProvider 

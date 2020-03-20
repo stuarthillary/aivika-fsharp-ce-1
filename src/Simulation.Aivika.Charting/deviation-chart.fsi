@@ -22,7 +22,7 @@
 namespace Simulation.Aivika.Charting.Web
 
 open System
-open System.Web.UI
+open HtmlTags
 open System.Drawing
 
 open Simulation.Aivika
@@ -32,7 +32,7 @@ open Simulation.Aivika.Experiments
 /// It plots the Deviation Chart and saves it in file.
 type DeviationChartProvider =
 
-    interface IExperimentProvider<HtmlTextWriter>
+    interface IExperimentProvider<HtmlDocument>
 
     /// Initializes a new instance.
     new: unit -> DeviationChartProvider 

@@ -147,27 +147,18 @@ type LastValueTableProvider () as provider =
                     if exp.Verbose then
                         printfn "Generated file %s" filename
 
-                    let getLink filename =
+                    let getLink (filename:string) =
                         Uri.EscapeUriString (Path.GetFileName (filename))
 
                     let renderLink filename text = 
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteBeginTag ("a")
-                        writer.WriteAttribute ("href", getLink filename)
-                        writer.Write (">")
-                        writer.WriteEncodedText (text)
-                        writer.WriteEndTag ("a")
-                        writer.WriteEndTag ("p")
+                        let a = writer.Add("p").Add("a")
+                        a.Attr("href", getLink filename) |> ignore
+                        a.Text text |> ignore
 
-                    writer.WriteFullBeginTag ("h3")
-                    writer.WriteEncodedText (provider.Title)
-                    writer.WriteEndTag ("h3")
+                    writer.Add("h3").Text provider.Title |> ignore
 
                     if provider.Description <> "" then
-
-                        writer.WriteFullBeginTag ("p")
-                        writer.WriteEncodedText (provider.Description)
-                        writer.WriteEndTag ("p")
+                        writer.Add("p").Text provider.Description |> ignore
 
                     renderLink filename provider.LinkText
             }

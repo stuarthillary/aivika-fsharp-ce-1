@@ -23,7 +23,7 @@ namespace Simulation.Aivika.Charting.Web
 
 open System
 open System.Globalization
-open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -38,26 +38,26 @@ module ExperimentProvider =
     let timeSeries (series: ResultTransform) =
         let p = TimeSeriesProvider ()
         p.Series <- series
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>
 
     [<CompiledName ("XYChart")>]
     let xyChart (seriesX: ResultTransform) (seriesY: ResultTransform) =
         let p = XYChartProvider ()
         p.SeriesX <- seriesX
         p.SeriesY <- seriesY
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>
 
     [<CompiledName ("DeviationChart")>]
     let deviationChart (series: ResultTransform) =
         let p = DeviationChartProvider ()
         p.Series <- series
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>
 
     [<CompiledName ("LastValueHistogram")>]
     let lastValueHistogram (series: ResultTransform) =
         let p = LastValueHistogramProvider ()
         p.Series <- series
-        p :> IExperimentProvider<HtmlTextWriter>
+        p :> IExperimentProvider<HtmlDocument>
 
     [<CompiledName ("Queue")>]
     let queue (series: ResultTransform) =
