@@ -25,3 +25,4 @@ nuget/**/LICENSE
 nuget/**/LICENSE.GPLv3
 nuget-tests/**/bin/
 nuget-tests/**/obj/
+**/.vs/*
