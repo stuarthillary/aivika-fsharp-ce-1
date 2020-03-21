@@ -170,7 +170,7 @@ type TimeSeriesProvider () as provider =
                         Uri.EscapeUriString (Path.GetFileName (filename))
 
                     let renderImage filename = 
-                        writer.Add("p").Add("image").Attr("image", getLink filename) |> ignore
+                        writer.Add("p").Add("image").Attr("src", getLink filename) |> ignore
 
                     let renderSingleRun () =
                         let filename = dict.[0]

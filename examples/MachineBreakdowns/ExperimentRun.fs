@@ -2,7 +2,6 @@
 namespace Simulation.Aivika.Examples
 
 open System
-open System.Web.UI
 
 open Simulation.Aivika
 open Simulation.Aivika.Results

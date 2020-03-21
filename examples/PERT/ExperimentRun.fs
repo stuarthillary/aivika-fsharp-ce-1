@@ -2,7 +2,7 @@
 namespace Simulation.Aivika.Examples
 
 open System
-open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -40,13 +40,13 @@ module Experiment =
             let p = new LastValueStatsProvider ()
             p.Title  <- "The Completion Time"
             p.Series <- timers
-            p :> IExperimentProvider<HtmlTextWriter>
+            p :> IExperimentProvider<HtmlDocument>
 
         let lastValueHistogramProvider title series =
            let p = new LastValueHistogramProvider ()
            p.Title  <- title
            p.Series <- series >> completionTime
-           p :> IExperimentProvider<HtmlTextWriter>
+           p :> IExperimentProvider<HtmlDocument>
 
         let providers =
             [ExperimentProvider.experimentSpecs;

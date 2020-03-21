@@ -2,7 +2,7 @@
 namespace Simulation.Aivika.Examples
 
 open System
-open System.Web.UI
+open HtmlTags
 
 open Simulation.Aivika
 open Simulation.Aivika.Results
@@ -26,10 +26,10 @@ module Experiment =
         let provider4 = TableProvider ()
 
         let providers =
-            [ provider1 :> IExperimentProvider<HtmlTextWriter>;
-              provider2 :> IExperimentProvider<HtmlTextWriter>;
-              provider3 :> IExperimentProvider<HtmlTextWriter>;
-              provider4 :> IExperimentProvider<HtmlTextWriter> ]
+            [ provider1 :> IExperimentProvider<HtmlDocument>;
+              provider2 :> IExperimentProvider<HtmlDocument>;
+              provider3 :> IExperimentProvider<HtmlDocument>;
+              provider4 :> IExperimentProvider<HtmlDocument> ]
 
         experiment.RenderHtml (Model.model, providers)
             |> Async.RunSynchronously
